@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from 'mongoose'; //npm install    comando para buscar las dependencias y instalarlas
 import { UserModel, IUser } from './user.js';
 
 async function main() {
@@ -24,17 +24,19 @@ async function main() {
   console.log("user3",user3);
 
   // findOne devuelve un objeto usando un filtro.
-  const user4: IUser | null = await UserModel.findOne({name: 'Bill'});
+  const user4: IUser | null = await UserModel.findOne({name: 'Bill'}); //retorna el primer que trova
   console.log("user4",user4);
 
   // Partial<IUser> Indica que el objeto puede tener solo algunos campos de IUser.
   // select('name email') solo devuelve name y email.
   // lean() devuelve un objeto plano de JS en lugar de un documento de Mongoose.
   const user5: Partial<IUser> | null  = await UserModel.findOne({ name: 'Bill' })
-    .select('name email').lean();
+    .select('name email').lean(); //solo selecciona el name y el email, pero no cumple la interfaz de usuari, por eso ponemos Partial<IUser>
   console.log("user5",user5);
 }
 
 main()
 
+//con  popullate para juntar resultados (ejemplo, sustityue un ebject ID por todo el JSON), es la unica forma de hacer relaciones
+//
     
