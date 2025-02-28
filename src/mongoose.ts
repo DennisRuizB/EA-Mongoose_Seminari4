@@ -17,7 +17,7 @@ async function main() {
     "works": ['MonoAzul','Rino','DragonNegro'],
     "phone": 999111222,
     "age": 20,
-    "alias": 'PacoMerselo',
+    "alias": 'PacoMerselo'
   };
  
   //añadir un nuevo artista
