@@ -11,11 +11,6 @@ async function main() {
   .then(() => console.log('Conectado a MongoDB'))
   .catch(err => console.error('Error al conectar:', err));
 
-  // const user1:  IUser = {
-  //   "name": 'Bill',
-  //   "email": 'bill@initech.com',
-  //   "avatar": 'https://i.imgur.com/dM7Thhn.png'
-  // };
 
   const artist1: IArtist = {
     "name": 'Paco',
@@ -24,45 +19,39 @@ async function main() {
     "age": 20,
     "alias": 'PacoMerselo',
   };
+ 
+  //añadir un nuevo artista
+  console.log("artista1",artist1);
+  const newArtist = new ArtistModel(artist1); //aqui mongoose genera _id automaticamente antes de que se guarde en MongoDB
+  const artist2: IArtist = await newArtist.save(); //aqui nos retorna el documento guardado en la DB
+  console.log("artist2",artist2);
 
-  const artist5: IArtist = {
+  //const newArtist2 = new ArtistModel(artist5);
+ // await newArtist2.save();
+  const newArtist2 : IArtist = await ArtistModel.create<IArtist>({ //de esta manera solo definimos una constante (.create lo guardaa en DB con _id)
     "name": 'Dennis',
     "works": ['MonaLisa','Azul','RioNegro'],
     "phone": 12313321,
     "age": 20,
     "alias": 'Denn'
-  };
+  })
+  console.log("newArtist2",newArtist2);
 
-  const artist6: IArtist = {
+  const newArtist3 = await ArtistModel.create<IArtist>({
     "name": 'Marina',
     "works": ['aaa','123','pato'],
     "phone": 12314124,
     "age": 20,
-  };
+  });
 
-  const artist7: IArtist = {
+
+  const newArtist4 = await ArtistModel.create<IArtist>({
     "name": 'Pau',
     "works": ['Papapa','lolo'],
     "phone": 1232143,
     "age": 21
-  };
-
-
-
- 
-  //añadir un nuevo artista
-  console.log("artista1",artist1);
-  const newArtist = new ArtistModel(artist1);
-  const artist2: IArtist = await newArtist.save();
-  console.log("artist2",artist2);
-
-  const newArtist2 = new ArtistModel(artist5);
-  await newArtist2.save();
-  const newArtist3 = new ArtistModel(artist6);
-  await newArtist3.save();
-  const newArtist4 = new ArtistModel(artist7);
-  await newArtist4.save();
-
+  });
+  
   const gallery1 : IGallery = {
     "name": 'GaleriaGo',
     "city": 'Barcelona',
@@ -88,9 +77,8 @@ async function main() {
 
 
   //findByIdAndUpdate 
-  const updateArtist: IArtist | null = await ArtistModel.findByIdAndUpdate(
-    artist2._id, 
-    {"works": ['MonoAzul','Chocolate','DragonNegro'], 
+  const updateArtist: IArtist | null = await ArtistModel.findByIdAndUpdate(artist2._id, 
+    {"works": ['MonoAzul33','Chocolate','DragonNegroNuevo'], 
      "alias": "Chocolatin"},
     {new: true});
  console.log('Artista actualizado:', updateArtist);
@@ -103,17 +91,20 @@ async function main() {
 
 
 //Ejmeplo populate  : sustituye en la galeria con id=newGallery._id, las id de artistas por el numero y el nombre de estos
-const galleryWithArtists = await GalleryModel.findById(newGallery._id).populate('artists', 'name phone'); //para que de cada artista veamos el name y phone
-console.log("populate",galleryWithArtists);
+const galleryWithArtists = await GalleryModel.findById(newGallery._id).populate('artists', 'name phone -_id'); //para que de cada artista veamos el name y phone y -_id para quitar la id
+console.log("populate",galleryWithArtists);                                      //'artists' hace referencia al parametro artists del modelo de gallery                 
 
 //Ejemplo agreggate: .find() es adecuado para consultas simples y directas, .aggregate() te permite realizar operaciones más complejas, 
 // como filtrado avanzado, agrupación, ordenación, transformación de datos, y más.
 
 const artistAgregate: IArtist[] | null = await ArtistModel.aggregate([
   {$match : {age : 20}}, //busca los artistas que coincidan con age = 20
-  { $limit: 2},  //limita a que solo hayan 2 resultados como maximo
+  {$limit: 2},  //limita a que solo hayan 2 resultados como maximo
   {$sort: { "phone": -1 }  }]); //ordena orden descendente por en campo "phone"
 console.log("artistAgregate",artistAgregate);  
+
+
+
 
 
   // // Partial<IUser> Indica que el objeto puede tener solo algunos campos de IUser.

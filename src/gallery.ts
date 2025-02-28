@@ -1,5 +1,4 @@
 import { Schema, model } from 'mongoose';
-import { ObjectId } from 'mongoose';
 
 // 1. Create an interface representing a TS object.
 export interface IGallery {
@@ -14,7 +13,7 @@ export interface IGallery {
 const gallerySchema = new Schema<IGallery>({
     name: { type: String, required: true},
     city: { type: String, required: true},
-    artists: [{ type: Schema.Types.ObjectId, ref: 'Artist' }],
+    artists: [{ type: Schema.Types.ObjectId, ref: 'Artist' }], //ref: 'Artist' relaciona gallery con el modelo de artista
     price: Number
 });
 

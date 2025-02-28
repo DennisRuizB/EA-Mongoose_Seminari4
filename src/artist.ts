@@ -1,5 +1,4 @@
 import { Schema, model } from 'mongoose';
-import { ObjectId } from 'mongoose';
 
 // 1. Create an interface representing a TS object.
 export interface IArtist {
